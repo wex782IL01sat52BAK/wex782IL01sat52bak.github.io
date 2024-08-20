@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persons - External Intelligence 0.11</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000;
+            color: white;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 250px;
+            background-color: #111;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar .menu li {
+            margin: 15px 0;
+        }
+
+        .sidebar .menu li a {
+            color: #2e37b8;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .sidebar .menu li a:hover {
+            color: white;
+        }
+
+        /* Power-off button */
+        .sidebar .power-off {
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .sidebar .power-off button {
+            background-color: #2e37b8;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .sidebar .power-off button:hover {
+            background-color: darkred;
+            transform: scale(1.1);
+        }
+
+        /* Main content area */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .search-container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            background-color: #111;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-container label {
+            display: block;
+            margin: 15px 0 5px;
+            font-size: 1rem;
+            color: #2e37b8;
+        }
+
+        .search-container input, .search-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #2e37b8;
+            background-color: #222;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .search-container button {
+            width: 100%;
+            padding: 15px;
+            background-color: #2e37b8;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: darkorange;
+        }
+
+        .results-container {
+            margin-top: 20px;
+        }
+
+        .results-container .result {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .results-container .result a {
+            color: #2e37b8;
+            text-decoration: none;
+            font-size: 1.2rem;
+            display: block;
+        }
+
+        .results-container .result a:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 768px) {
+            .search-container {
+                padding: 30px;
+            }
+
+            .search-container label {
+                font-size: 1.1rem;
+            }
+
+            .search-container input, .search-container select {
+                font-size: 1.1rem;
+            }
+
+            .search-container button {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="persons.html">| Persons</a></li>
+            <li><a href="#">| Locations</a></li>
+            <li><a href="#">| Objects</a></li>
+            <li><a href="#">| Vehicles</a></li>
+            <li><a href="#">| Recognition</a></li>
+            <li><a href="#">| Reports</a></li>
+        </ul>
+        <div class="power-off">
+            <button onclick="powerOff()">&#x23FB;</button>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="search-container">
+            <form id="searchForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter name">
+
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="unknown">Unknown</option>
+                </select>
+
+                <label for="alias">Alias:</label>
+                <input type="text" id="alias" name="alias" placeholder="Enter alias">
+
+                <label for="place-of-birth">Place of Birth:</label>
+                <input type="text" id="place-of-birth" name="place-of-birth" placeholder="Enter place of birth">
+
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob">
+
+                <label for="ethnicity">Ethnicity:</label>
+                <select id="ethnicity" name="ethnicity">
+                    <option value="">Select ethnicity</option>
+                    <option value="african">African (Africa)</option>
+                    <option value="asian">Asian (Asia)</option>
+                    <option value="korean">Korean (North/South Korea)</option>
+                    <option value="arab">Arab (Middle East)</option>
+                    <option value="indian">Indian (India)</option>
+                    <option value="albanian">Albanian (Albania)</option>
+                    <option value="basque">Basque (Spain, France)</option>
+                    <option value="catalan">Catalan (Spain, France)</option>
+                    <option value="dutch">Dutch (Netherlands)</option>
+                    <option value="english">English (United Kingdom)</option>
+                    <option value="finnish">Finnish (Finland)</option>
+                    <option value="french">French (France)</option>
+                    <option value="german">German (Germany)</option>
+                    <option value="greek">Greek (Greece)</option>
+                    <option value="hungarian">Hungarian (Hungary)</option>
+                    <option value="irish">Irish (Ireland)</option>
+                    <option value="italian">Italian (Italy)</option>
+                    <option value="norwegian">Norwegian (Norway)</option>
+                    <option value="polish">Polish (Poland)</option>
+                    <option value="portuguese">Portuguese (Portugal)</option>
+                    <option value="roma">Roma (Various European countries)</option>
+                    <option value="russian">Russian (Russia)</option>
+                    <option value="scottish">Scottish (Scotland, UK)</option>
+                    <option value="serbian">Serbian (Serbia)</option>
+                    <option value="spanish">Spanish (Spain)</option>
+                    <option value="swedish">Swedish (Sweden)</option>
+                    <option value="ukrainian">Ukrainian (Ukraine)</option>
+                    <option value="hispanic">Hispanic/Latino (Mexico, Central and South America)</option>
+                    <option value="american">American (USA)</option>
+                    <option value="canadian">Canadian (Canada)</option>
+                    <option value="australian">Australian (Australia)</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="job">Job:</label>
+                <input type="text" id="job" name="job" placeholder="Enter job">
+
+                <label for="background">Background:</label>
+                <input type="text" id="background" name="background" placeholder="Enter background">
+
+                <button type="button" onclick="search()">Search</button>
+            </form>
+            <div class="results-container" id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            return [
+                {
+                    name: "John Doe",
+                    gender: "male",
+                    alias: "JD",
+                    place_of_birth: "New York",
+                    date_of_birth: "1990-01-01",
+                    ethnicity: "american",
+                    job: "Software Engineer",
+                    background: "Tech"
+                },
+                {
+                    name: "Jane Smith",
+                    gender: "female",
+                    alias: "JS",
+                    place_of_birth: "Los Angeles",
+                    date_of_birth: "1985-05-15",
+                    ethnicity: "american",
+                    job: "Data Scientist",
+                    background: "Science"
+                },
+                {
+                    name: "Wiebren Boonstra",
+                    gender: "male",
+                    alias: "-",
+                    place_of_birth: "Heerenveen",
+                    date_of_birth: "2009-01-16",
+                    ethnicity: "dutch",
+                    job: "Software Engineer",
+                    background: "High School Student Lindecollege, De Burcht, Judo gedaan, Doet aan fitness"
+                }
+            ];
+        }
+
+        async function search() {
+            const name = document.getElementById('name').value.toLowerCase();
+            const gender = document.getElementById('gender').value;
+            const alias = document.getElementById('alias').value.toLowerCase();
+            const placeOfBirth = document.getElementById('place-of-birth').value.toLowerCase();
+            const dob = document.getElementById('dob').value;
+            const ethnicity = document.getElementById('ethnicity').value;
+            const job = document.getElementById('job').value.toLowerCase();
+            const background = document.getElementById('background').value.toLowerCase();
+
+            const data = await fetchData();
+            console.log("Data fetched:", data);  // Debugging
+            const results = data.filter(person => {
+                return (!name || person.name.toLowerCase().includes(name)) &&
+                    (!gender || person.gender === gender) &&
+                    (!alias || person.alias.toLowerCase().includes(alias)) &&
+                    (!placeOfBirth || person.place_of_birth.toLowerCase().includes(placeOfBirth)) &&
+                    (!dob || person.date_of_birth === dob) &&
+                    (!ethnicity || person.ethnicity === ethnicity) &&
+                    (!job || person.job.toLowerCase().includes(job)) &&
+                    (!background || person.background.toLowerCase().includes(background));
+            });
+            console.log("Filtered results:", results);  // Debugging
+
+            displayResults(results);
+        }
+
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<p>No results found.</p>';
+                return;
+            }
+
+            results.forEach(person => {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result';
+                resultDiv.innerHTML = `
+                    <a href="person.html?name=${encodeURIComponent(person.name)}">${person.name}</a>
+                `;
+                resultsContainer.appendChild(resultDiv);
+            });
+        }
+
+        function powerOff() {
+            alert("Powering off...");
+        }
+    </script>
+</body>
+</html>
