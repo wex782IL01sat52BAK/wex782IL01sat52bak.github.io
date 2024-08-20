@@ -1,0 +1,8 @@
+name
+gender
+alias
+place_of_birth
+date_of_birth
+ethnicity
+job
+background
